@@ -1,20 +1,22 @@
 <template>
   <div class="promo-wrapper">
     <h2 class="title">Акційні пропозиції від магазинів партнерів:</h2>
-    <div v-swiper="swiperOption">
-      <div class="swiper-wrapper" :class="{centered: banners.length < 4}">
-        <a v-for="banner in banners"
-           :key="banner.key"
-           class="swiper-slide"
-           :href="banner.url"
-           target="_blank">
-          <div class="image-wrapper">
-            <img :src="banner.image"/>
-          </div>
-          <p class="text" v-html="banner.text"></p>
-        </a>
+    <div class="swiper">
+      <div v-swiper="swiperOption">
+        <div class="swiper-wrapper" :class="{centered: banners.length < 4}">
+          <a v-for="banner in banners"
+             :key="banner.key"
+             class="swiper-slide"
+             :href="banner.url"
+             target="_blank">
+            <div class="image-wrapper">
+              <img :src="banner.image"/>
+            </div>
+            <p class="text" v-html="banner.text"></p>
+          </a>
+        </div>
+        <div v-if="banners.length > 3" class="swiper-pagination"></div>
       </div>
-      <div v-if="banners.length > 3" class="swiper-pagination"></div>
     </div>
   </div>
 </template>
@@ -69,17 +71,16 @@ export default {
           clickable: true,
         },
         breakpoints: {
-          1024: {
+          1025: {
             slidesPerView: 3,
-            spaceBetween: 40,
-            allowTouchMove: false
+            spaceBetween: 20,
           },
           768: {
-            slidesPerView: 3,
-            spaceBetween: 10
+            slidesPerView: 2,
+            spaceBetween: 40
           },
           640: {
-            slidesPerView: 2,
+            slidesPerView: 1,
             spaceBetween: 10
           },
           320: {
@@ -103,7 +104,6 @@ export default {
   }
 
   .swiper-wrapper {
-    padding: 10px 0;
 
     .swiper-slide {
       box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.15);
@@ -138,50 +138,81 @@ export default {
       line-height: 38px;
     }
 
-    .swiper-wrapper {
-      padding: 20px 111px 50px;
+    .swiper {
+      max-width: 1298px;
+      margin: 0 auto;
 
-      &.centered {
-        display: flex;
-        justify-content: center;
-        padding: 20px 0;
-      }
+      .swiper-wrapper {
+        padding: 20px 0 40px;
 
-      .swiper-slide {
-        max-width: 406px;
-        width: 32%;
-        padding: 40px;
-        box-sizing: border-box;
-        height: auto;
-        transition: transform .15s ease-out;
-        transform: scale(1);
-
-        &:hover {
-          transform: scale(1.05);
+        &.centered {
+          display: flex;
+          justify-content: center;
+          padding: 20px 0;
         }
 
-        &:last-child {
-          margin-right: 0 !important;
-        }
+        .swiper-slide {
+          padding: 40px;
+          box-sizing: border-box;
+          height: auto;
+          transform: scale(0.96);
 
-        .image-wrapper {
-          margin-bottom: 24px;
-        }
+          &:last-child {
+            margin-right: 0 !important;
+          }
 
-        .text {
-          font-size: 18px;
-          line-height: 25px;
+          .image-wrapper {
+            margin-bottom: 24px;
+          }
+
+          .text {
+            font-size: 18px;
+            line-height: 25px;
+          }
         }
       }
-    }
 
-    .swiper-pagination {
-      bottom: 0;
+      .swiper-pagination {
+        bottom: 0;
+      }
     }
   }
 }
 
 @media only screen and (max-width: 1024px) {
+  .promo-wrapper {
+    padding: 48px 24px 40px;
 
+    .title {
+      font-size: 20px;
+      line-height: 24px;
+      margin-bottom: 24px;
+    }
+
+    .swiper-wrapper {
+      margin: 0 -10px;
+      padding: 20px 10px 40px;
+
+      .swiper-slide {
+        padding: 24px;
+        box-sizing: border-box;
+        height: auto;
+        transform: scale(0.95);
+
+        .image-wrapper {
+          margin-bottom: 16px;
+        }
+
+        .text {
+          font-size: 16px;
+          line-height: 23px;
+        }
+      }
+    }
+
+    .swiper-pagination {
+      bottom: 0px;
+    }
+  }
 }
 </style>

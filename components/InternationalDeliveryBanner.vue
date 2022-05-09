@@ -86,11 +86,13 @@ export default {
       display: inline-block;
       text-decoration: none;
       font-size: 16px;
-      span{
+
+      span {
         display: flex;
         align-items: center;
         justify-content: center;
-        svg{
+
+        svg {
           margin-left: 12px;
           position: relative;
           top: 1px;
@@ -143,14 +145,17 @@ export default {
       .more-button {
         padding: 14px 106px 14px 90px;
         transition: all .2s linear;
+
         svg {
           path {
             transition: all .2s linear;
           }
         }
-        &:hover{
+
+        &:hover {
           background: transparent;
           color: rgba(32, 33, 36, 0.87);
+
           svg {
             path {
               fill: rgba(32, 33, 36, 0.87);
@@ -163,8 +168,45 @@ export default {
 }
 
 @media only screen and (max-width: 1024px) {
-  .image {
-    display: none;
+  .international-delivery-wrapper {
+    padding: 48px 24px;
+
+    .image {
+      display: none;
+    }
+
+    .info-wrapper {
+
+      .title {
+        font-size: 20px;
+        line-height: 24px;
+        margin-bottom: 24px;
+      }
+
+      .proposals-list {
+        .item {
+          .proposal-title {
+            font-size: 16px;
+            line-height: 19px;
+            margin-bottom: 8px;
+          }
+
+          .proposal-text {
+            font-size: 14px;
+            line-height: 20px;
+            margin-bottom: 24px;
+          }
+        }
+      }
+
+      .more-button {
+        padding: 14px;
+        max-width: 312px;
+        width: 100%;
+        margin: 0 auto;
+        display: block;
+      }
+    }
   }
 }
 </style>

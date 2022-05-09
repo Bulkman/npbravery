@@ -40,7 +40,6 @@ export default {
         },
       ],
       swiperOption: {
-        allowTouchMove: false,
         slidesPerView: 1,
         autoplay: {
           delay: 3000,
@@ -67,6 +66,12 @@ export default {
 @media only screen and (min-width: 1025px) {
   .main-banner-wrapper {
     margin-bottom: 78px;
+  }
+}
+
+@media only screen and (max-width: 1024px) {
+  .main-banner-wrapper {
+    margin-bottom: 48px;
   }
 }
 </style>

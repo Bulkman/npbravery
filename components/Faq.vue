@@ -7,14 +7,16 @@
            class="item"
            :class="{active: item.active}"
       >
-        <div class="arrow-wrapper">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path
-              d="M17.2946 9.29461C16.9053 8.90534 16.2743 8.905 15.8846 9.29384L12 13.17L8.11538 9.29385C7.72568 8.905 7.09466 8.90534 6.70538 9.29462V9.29462C6.31581 9.68419 6.31581 10.3158 6.70538 10.7054L11.2929 15.2929C11.6834 15.6834 12.3166 15.6834 12.7071 15.2929L17.2946 10.7054C17.6842 10.3158 17.6842 9.68419 17.2946 9.29461V9.29461Z"
-              fill="#202124" fill-opacity="0.38"/>
-          </svg>
-        </div>
-        <h2 class="item-title" @click="item.active = !item.active" v-html="item.title"></h2>
+        <h2 class="item-title" @click="item.active = !item.active">
+          {{item.title}}
+          <div class="arrow-wrapper">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M17.2946 9.29461C16.9053 8.90534 16.2743 8.905 15.8846 9.29384L12 13.17L8.11538 9.29385C7.72568 8.905 7.09466 8.90534 6.70538 9.29462V9.29462C6.31581 9.68419 6.31581 10.3158 6.70538 10.7054L11.2929 15.2929C11.6834 15.6834 12.3166 15.6834 12.7071 15.2929L17.2946 10.7054C17.6842 10.3158 17.6842 9.68419 17.2946 9.29461V9.29461Z"
+                fill="#202124" fill-opacity="0.38"/>
+            </svg>
+          </div>
+        </h2>
         <p class="item-text" v-html="item.text"></p>
       </div>
     </div>
@@ -188,6 +190,11 @@ export default {
       .arrow-wrapper {
         position: absolute;
         right: 0;
+        top: 0;
+        bottom: 0;
+        margin: auto;
+        display: flex;
+        align-items: center;
         transform: rotate(0);
         transition: transform .2s ease-out;
       }
@@ -195,6 +202,7 @@ export default {
       .item-title {
         color: #33332F;
         margin: 0;
+        position: relative;
       }
 
       .item-text {
@@ -238,10 +246,6 @@ export default {
           border-bottom: 1px solid #E5E5E5;
         }
 
-        .arrow-wrapper {
-          top: 24px;
-        }
-
         .item-title {
           font-size: 20px;
           cursor: pointer;
@@ -262,6 +266,49 @@ export default {
     }
   }
 }
+
+@media only screen and (max-width: 1024px) {
+  .faq-wrapper {
+    margin-bottom: 48px;
+    padding-top: 48px;
+
+    .title {
+      padding: 0 24px;
+      margin-bottom: 24px;
+      font-size: 20px;
+      line-height: 24px;
+    }
+
+    .accordion {
+      padding: 8px 24px;
+
+      .item {
+
+        &:not(:last-child) {
+          border-bottom: 1px solid #E5E5E5;
+        }
+
+        .item-title {
+          font-size: 14px;
+          line-height: 17px;
+          padding: 13.5px 40px 13.5px 0;
+        }
+
+        .item-text {
+          font-size: 12px;
+          line-height: 17px;
+        }
+
+        &.active {
+          .item-text {
+            padding-bottom: 13.5px;
+          }
+        }
+      }
+    }
+  }
+}
+
 </style>
 <style lang="scss">
 .faq-wrapper {

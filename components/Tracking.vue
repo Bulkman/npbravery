@@ -6,10 +6,15 @@
         <input class="en-input"
                type="text"
                placeholder="Введіть номер ЕН"
+               v-model="trackingNumber"
         />
-        <button class="en-button" type="button">
+        <button class="en-button"
+                type="button"
+                :disabled="disabled"
+                @click="openTracking"
+        >
           <span>
-            Відстежити
+            <span class="text">Відстежити</span>
              <svg width="17" height="16" viewBox="0 0 17 16" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path
                 d="M10.8333 9.33326H10.3067L10.12 9.15326C10.92 8.21993 11.3333 6.9466 11.1067 5.59326C10.7933 3.73993 9.24667 2.25993 7.38 2.03326C4.56 1.6866 2.18667 4.05993 2.53333 6.87993C2.76 8.74659 4.24 10.2933 6.09333 10.6066C7.44667 10.8333 8.72 10.4199 9.65333 9.61993L9.83333 9.80659V10.3333L12.6667 13.1666C12.94 13.4399 13.3867 13.4399 13.66 13.1666C13.9333 12.8933 13.9333 12.4466 13.66 12.1733L10.8333 9.33326ZM6.83333 9.33326C5.17333 9.33326 3.83333 7.99326 3.83333 6.33326C3.83333 4.67326 5.17333 3.33326 6.83333 3.33326C8.49333 3.33326 9.83333 4.67326 9.83333 6.33326C9.83333 7.99326 8.49333 9.33326 6.83333 9.33326Z"
@@ -39,13 +44,30 @@
           </a>
         </div>
       </div>
-      <img class="qr-image" src="../assets/images/qr.jpg"/>
+      <div class="qr-image-wrapper">
+        <img class="qr-image" src="../assets/images/qr.svg"/>
+      </div>
     </div>
   </div>
 </template>
 <script>
 export default {
-  name: 'Tracking'
+  name: 'Tracking',
+  data() {
+    return {
+      trackingNumber: ''
+    }
+  },
+  computed: {
+    disabled() {
+      return !this.trackingNumber.length
+    }
+  },
+  methods: {
+    openTracking() {
+      window.open(`https://novaposhta.ua/ru/tracking/?cargo_number=${this.trackingNumber}`, '_blank').focus();
+    }
+  }
 }
 </script>
 <style scoped lang="scss">
@@ -85,8 +107,11 @@ export default {
         display: inline-block;
         text-decoration: none;
         font-size: 16px;
+        &:disabled {
+          pointer-events: none;
+        }
 
-        span {
+        &>span {
           display: flex;
           align-items: center;
           justify-content: center;
@@ -232,11 +257,96 @@ export default {
         }
       }
 
-      .qr-image {
+      .qr-image-wrapper {
+        width: 119px;
+        height: 119px;
         position: absolute;
         top: 32px;
         right: 26px;
-        width: 119px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #fff;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 1024px) {
+  .tracking-wrapper {
+    .tracking-form {
+      padding: 48px 24px;
+      margin-bottom: 24px;
+
+      .title {
+        font-size: 20px;
+        line-height: 24px;
+        margin-bottom: 24px;
+      }
+
+      form {
+        margin-bottom: 32px;
+        position: relative;
+
+        .en-input {
+          width: 100%;
+          padding-right: 55px;
+        }
+
+        .en-button {
+          position: absolute;
+          height: 100%;
+          right: 0;
+          width: 48px;
+
+          &>span {
+            .text {
+              display: none;
+            }
+            svg {
+              margin: 0;
+            }
+          }
+        }
+      }
+
+      .subtitle {
+        font-size: 20px;
+        line-height: 22px;
+        margin-bottom: 16px;
+      }
+
+      .text {
+        font-size: 14px;
+        line-height: 22px;
+      }
+    }
+
+    .apps-wrapper {
+      padding: 48px 24px;
+
+      .title {
+        font-size: 20px;
+        line-height: 24px;
+        margin-bottom: 24px;
+      }
+
+      .text {
+        font-size: 14px;
+        line-height: 22px;
+        margin-bottom: 24px;
+      }
+
+      .apps-buttons {
+        a {
+          &:first-child {
+            margin-bottom: 16px;
+          }
+        }
+      }
+
+      .qr-image {
+        display: none;
       }
     }
   }

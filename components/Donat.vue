@@ -55,9 +55,7 @@
         </span>
       </a>
     </div>
-    <div class="image-wrapper">
-      <!--      <img src="../assets/images/donat-desktop.jpg"/>-->
-    </div>
+    <div class="image-wrapper"></div>
   </div>
 </template>
 <script>
@@ -205,6 +203,75 @@ export default {
       background-image: url('../assets/images/donat-desktop.jpg');
       background-size: cover;
       background-position: center;
+    }
+  }
+}
+
+@media only screen and (max-width: 1024px) {
+  .donat-wrapper {
+    padding: 48px 24px 0;
+
+    .info-wrapper {
+
+      padding-bottom: 24px;
+
+      .title {
+        font-size: 20px;
+        line-height: 24px;
+        margin-bottom: 24px;
+      }
+
+      .text {
+        font-size: 14px;
+        line-height: 20px;
+        margin-bottom: 24px;
+      }
+
+      .statistic {
+        margin-bottom: 24px;
+
+        .item {
+          &:not(:last-child) {
+            margin-bottom: 16px;
+          }
+
+          .indicator {
+            font-size: 16px;
+            line-height: 19px;
+            margin-bottom: 4px;
+
+            .value {
+              font-size: 28px;
+              line-height: 34px;
+              display: inline-block;
+              margin: 0 8px;
+            }
+          }
+
+          .statistic-text {
+            font-size: 14px;
+            line-height: 17px;
+          }
+        }
+      }
+
+      .more-button {
+        padding: 14px;
+        max-width: 312px;
+        width: 100%;
+        margin: 0 auto;
+        display: block;
+      }
+    }
+
+    .image-wrapper {
+      background-image: url('../assets/images/donat-desktop.jpg');
+      background-size: cover;
+      background-position: center;
+      display: block;
+      width: 100%;
+      margin: 0 -24px;
+      padding: 69% 24px 0;
     }
   }
 }

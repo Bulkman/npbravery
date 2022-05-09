@@ -32,7 +32,7 @@
       </div>
     </div>
     <div class="table">
-      <div class="table-head">
+      <div class="table-head" v-if="!noSearchYet">
         <div class="td name">
           Відділення
         </div>
@@ -74,6 +74,18 @@
           </div>
         </div>
       </div>
+      <div class="helper-wrapper" v-if="noSearchYet">
+        <div class="info-wrapper">
+          <svg class="arrow" width="35" height="93" viewBox="0 0 35 93" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M33.2199 92.2098C34.0364 92.35 34.8119 91.8018 34.9521 90.9853C35.0923 90.1688 34.5441 89.3933 33.7276 89.2531L33.2199 92.2098ZM15.3443 1.33452C14.9768 0.59209 14.077 0.28817 13.3345 0.655704L1.23583 6.64499C0.493392 7.01252 0.189474 7.91233 0.557006 8.65477C0.924539 9.3972 1.82434 9.70112 2.56678 9.33359L13.3212 4.00978L18.645 14.7642C19.0125 15.5066 19.9123 15.8105 20.6548 15.443C21.3972 15.0755 21.7011 14.1757 21.3336 13.4332L15.3443 1.33452ZM7.63935 66.1891L6.26863 66.7983L7.63935 66.1891ZM33.4737 90.7315C33.7276 89.2531 33.7284 89.2532 33.7291 89.2534C33.7293 89.2534 33.73 89.2535 33.7303 89.2536C33.731 89.2537 33.7314 89.2538 33.7316 89.2538C33.732 89.2539 33.7314 89.2538 33.7299 89.2535C33.7268 89.2529 33.7199 89.2517 33.7093 89.2496C33.6881 89.2456 33.6519 89.2384 33.6015 89.2277C33.5007 89.2063 33.3429 89.1707 33.1337 89.1169C32.7153 89.0094 32.0916 88.8296 31.306 88.5466C29.7346 87.9805 27.5184 87.0025 25.0024 85.3658C19.9829 82.1007 13.7233 76.1848 9.01007 65.5799L6.26863 66.7983C11.2298 77.9611 17.8874 84.3164 23.3665 87.8805C26.0998 89.6585 28.5282 90.7346 30.2892 91.369C31.1698 91.6862 31.8841 91.8933 32.3872 92.0225C32.6388 92.0872 32.8377 92.1324 32.9783 92.1623C33.0486 92.1772 33.1044 92.1883 33.1449 92.196C33.1651 92.1999 33.1815 92.203 33.1941 92.2052C33.2004 92.2064 33.2056 92.2073 33.21 92.2081C33.2121 92.2085 33.214 92.2088 33.2157 92.2091C33.2165 92.2092 33.2176 92.2094 33.218 92.2095C33.219 92.2097 33.2199 92.2098 33.4737 90.7315ZM9.01007 65.5799C6.96822 60.9856 6.27438 54.7897 6.4604 47.9375C6.64559 41.1156 7.69711 33.7933 9.02718 27.0397C10.3561 20.2919 11.9562 14.1461 13.2248 9.68565C13.8589 7.45646 14.4094 5.6507 14.8008 4.40414C14.9965 3.78091 15.1523 3.29761 15.2589 2.97123C15.3121 2.80805 15.3531 2.6841 15.3805 2.60152C15.3943 2.56023 15.4046 2.52928 15.4114 2.50894C15.4148 2.49877 15.4173 2.49124 15.419 2.48641C15.4198 2.484 15.4204 2.48225 15.4207 2.48118C15.4209 2.48064 15.421 2.48035 15.4211 2.48008C15.4211 2.47996 15.4211 2.48 14 2C12.5789 1.52 12.5787 1.52039 12.5786 1.52094C12.5784 1.52135 12.5782 1.52208 12.5779 1.5229C12.5773 1.52454 12.5766 1.52687 12.5756 1.52986C12.5735 1.53585 12.5706 1.54453 12.5668 1.55588C12.5592 1.57856 12.5481 1.61188 12.5336 1.65559C12.5045 1.74298 12.4619 1.87189 12.407 2.04017C12.2971 2.37671 12.1378 2.87083 11.9385 3.50547C11.5401 4.77466 10.9816 6.60656 10.3393 8.86495C9.05521 13.3797 7.43301 19.6089 6.08372 26.46C4.73556 33.3055 3.65288 40.8064 3.4615 47.8561C3.27095 54.8755 3.95818 61.5997 6.26863 66.7983L9.01007 65.5799Z"
+              fill="white"/>
+          </svg>
+          <p class="text">
+            Обери місто та номер відділення/поштомату, щоб побачити актуальний графік роботи
+          </p>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -97,7 +109,8 @@ export default {
       selectedCity: null,
       warehouses: [],
       warehouseSelectValue: '',
-      selectedWarehouse: null
+      selectedWarehouse: null,
+      noSearchYet: true
     }
   },
   computed: {
@@ -127,6 +140,7 @@ export default {
       this.cityItems = response.data.data;
     },
     async fetchWarehouses() {
+      this.noSearchYet = false;
       return await this.$axios.post('', {
         "apiKey": "f0a192955bdefd1dd4c2942624d127b5",
         "modelName": "Address",
@@ -270,6 +284,19 @@ export default {
 }
 </script>
 <style scoped lang="scss">
+
+@keyframes arrow-animation {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(10px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
 .schedule-wrapper {
   .title {
     color: rgba(51, 51, 47, 1);
@@ -290,11 +317,11 @@ export default {
         outline: none;
         background: transparent;
         transition: all .2s ease-out;
-        padding: 10px 0;
         width: 49%;
         border-radius: 4px;
         cursor: pointer;
         border: 1px solid transparent;
+        padding: 0;
 
         &:not(.active):hover {
           border: 1px solid rgba(66, 215, 133, 1);
@@ -359,6 +386,26 @@ export default {
         }
       }
     }
+
+    .helper-wrapper {
+      background: rgba(187, 188, 188, 0.8);
+      display: flex;
+      justify-content: center;
+
+      .info-wrapper {
+        text-align: center;
+
+        .arrow {
+          animation: arrow-animation .8s ease-out infinite;
+        }
+
+        .text {
+          color: #fff;
+          margin: 0;
+          font-weight: 700;
+        }
+      }
+    }
   }
 }
 
@@ -379,6 +426,10 @@ export default {
       .schedule-switcher {
         width: 406px;
         margin-right: 40px;
+
+        .switch {
+          height: 40px;
+        }
       }
 
       .selects-wrapper {
@@ -396,6 +447,23 @@ export default {
     }
 
     .table {
+      .helper-wrapper {
+        padding: 113px 0 316px;
+
+        .info-wrapper {
+          .arrow {
+            margin-bottom: 24px;
+          }
+
+          .text {
+            font-size: 24px;
+            line-height: 34px;
+            max-width: 621px;
+            margin: 0 auto;
+          }
+        }
+      }
+
       .table-head,
       .table-body .table-row {
         display: flex;
@@ -453,6 +521,116 @@ export default {
         &.map {
           width: 180px;
         }
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 1024px) {
+  .schedule-wrapper {
+    padding: 0 24px;
+  }
+
+  .title {
+    font-size: 20px;
+    line-height: 24px;
+    margin-bottom: 16px;
+  }
+
+  .schedule-header {
+
+    .schedule-switcher {
+      margin-bottom: 32px;
+
+      .switch {
+        height: 32px;
+      }
+    }
+
+    .selects-wrapper {
+      margin-bottom: 24px;
+
+      .select {
+        width: 100%;
+        height: 40px;
+
+        &:first-child {
+          margin-bottom: 24px;
+        }
+      }
+    }
+  }
+
+  .table {
+    .info-wrapper {
+      padding: 48px 24px 111px;
+
+      .arrow {
+        margin-bottom: 16px;
+      }
+
+      .text {
+        font-size: 16px;
+        line-height: 22px;
+        max-width: 312px;
+        margin: 0 auto;
+      }
+    }
+
+    .table-head {
+      display: none;
+    }
+
+    .table-head {
+      border-bottom: 1px solid #E5E5E5;
+
+      .td {
+        text-align: center;
+        font-size: 14px;
+        line-height: 19px;
+        padding-top: 16px;
+        padding-bottom: 16px;
+      }
+    }
+
+    .table-body .table-row {
+      border-bottom: 1px solid #E5E5E5;
+    }
+
+    .table-body {
+      max-height: 553px;
+      overflow: auto;
+
+      .row {
+        min-height: 68px;
+      }
+    }
+
+    .td {
+      padding: 16px;
+      box-sizing: border-box;
+      color: rgba(51, 51, 47, 1);
+      font-size: 13px;
+      line-height: 18px;
+
+      &.name {
+        width: 430px;
+      }
+
+      &.schedule {
+        width: 210px;
+      }
+
+      &.type {
+        width: 260px;
+      }
+
+      &.input, &.output {
+        width: 170px;
+      }
+
+      &.map {
+        width: 180px;
       }
     }
   }

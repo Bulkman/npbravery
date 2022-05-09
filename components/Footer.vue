@@ -19,7 +19,6 @@ footer {
   p {
     margin: 0;
     color: rgba(51, 51, 47, 1);
-    text-align: center;
   }
 }
 
@@ -30,6 +29,16 @@ footer {
     margin: 0 -20px;
     font-size: 14px;
     line-height: 19px;
+    text-align: center;
+  }
+}
+
+@media only screen and (max-width: 1024px) {
+  footer {
+    background: #F2F2F5;
+    font-size: 10px;
+    line-height: 14px;
+    padding: 14px 44px 14px 24px;
   }
 }
 </style>
