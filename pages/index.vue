@@ -1,10 +1,13 @@
 <template>
   <div class="wrapper">
-    <Header :activeScrollBlock="activeScrollBlock" @linkClick="linkClickHandler"/>
+    <Header :activeScrollBlock="activeScrollBlock"
+            @linkClick="linkClickHandler"/>
     <MainBanner/>
-    <Schedule ref="schedule" :isMobile="isMobile"/>
+    <Schedule ref="schedule"
+              :isMobile="isMobile"/>
     <InternationalDeliveryBanner ref="international"/>
-    <Promo ref="promo" :isMobile="isMobile"/>
+    <Promo ref="promo"
+           :isMobile="isMobile"/>
     <Donat ref="donat"/>
     <Tracking ref="tracking"/>
     <Faq ref="faq"/>
@@ -61,6 +64,7 @@ export default {
   },
   mounted() {
     this.checkIsMobile();
+    this.calculateBlocksPosition();
 
     window.addEventListener('resize', () => {
       this.checkIsMobile();
@@ -69,7 +73,6 @@ export default {
         this.calculateBlocksPosition();
       }
     });
-
     window.addEventListener('scroll', () => {
       if (this.isMobile) {
         const scrollY = window.pageYOffset || document.documentElement.scrollTop;
@@ -85,8 +88,6 @@ export default {
         }
       }
     });
-
-    this.calculateBlocksPosition();
   },
 }
 </script>

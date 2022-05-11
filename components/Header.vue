@@ -195,6 +195,7 @@ header {
         display: block;
         padding: 24px;
         position: relative;
+
         &.active {
           &:before {
             content: '';

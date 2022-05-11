@@ -107,11 +107,12 @@ export default {
         display: inline-block;
         text-decoration: none;
         font-size: 16px;
+
         &:disabled {
           pointer-events: none;
         }
 
-        &>span {
+        & > span {
           display: flex;
           align-items: center;
           justify-content: center;
@@ -148,7 +149,7 @@ export default {
       color: #33332F;
     }
 
-    .apps-buttons{
+    .apps-buttons {
       a {
         text-decoration: none;
         width: 165px;
@@ -299,10 +300,11 @@ export default {
           right: 0;
           width: 48px;
 
-          &>span {
+          & > span {
             .text {
               display: none;
             }
+
             svg {
               margin: 0;
             }

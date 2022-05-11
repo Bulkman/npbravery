@@ -8,7 +8,7 @@
            :class="{active: item.active}"
       >
         <h2 class="item-title" @click="item.active = !item.active">
-          {{item.title}}
+          {{ item.title }}
           <div class="arrow-wrapper">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path
