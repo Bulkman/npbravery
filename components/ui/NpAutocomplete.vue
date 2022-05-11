@@ -4,7 +4,7 @@
       <label class="label" v-if="label">{{ label }}</label>
       <input class="input"
              type="search"
-             v-model="searchValue"
+             :value="lazySearch"
              @input="inputHandler"
              @focus="focusHandler"
              @blur="blurHandler"
@@ -43,6 +43,9 @@
 export default {
   name: 'NpAutocomplete',
   props: {
+    value: {
+      default: ''
+    },
     items: {
       required: true,
       type: Array
@@ -55,11 +58,6 @@ export default {
     itemValue: {
       required: false,
       type: String
-    },
-    minLength: {
-      required: false,
-      type: Number,
-      default: 2
     },
     label: {
       required: false,
@@ -74,14 +72,14 @@ export default {
   },
   data() {
     return {
-      searchValue: '',
+      lazySearch: this.value,
       selectedItem: null,
       isFocused: false,
     }
   },
   computed: {
     isEmpty() {
-      return !this.searchValue.length
+      return !this.lazySearch.length
     },
     isAutocompleteListVisible() {
       return this.isFocused && this.items.length
@@ -91,14 +89,14 @@ export default {
     getItemText(item) {
       return item[this.itemText]
     },
-    inputHandler() {
-      if (this.searchValue.length >= this.minLength) {
-        this.$emit('inputHandler', this.searchValue);
-      }
+    inputHandler(e) {
+      const value = e.target.value;
+      this.lazySearch = value;
+      this.$emit('input', value);
     },
     selectHandler(item) {
       this.selectedItem = item;
-      this.searchValue = item[this.itemText];
+      this.lazySearch = item[this.itemText];
       this.$emit('selectHandler', this.itemValue ? this.selectedItem[this.itemValue] : this.selectedItem);
     },
     focusHandler() {
@@ -113,15 +111,16 @@ export default {
       }, 150)
     },
     clearSearchValue() {
-      this.searchValue = '';
+      this.lazySearch = '';
       this.$emit('selectHandler', null);
+      this.$emit('clearClick')
     }
   },
- /* watch: {
-    items(value) {
-      this.isAutocompleteListVisible = !!value.length
+  watch: {
+    value(value) {
+      this.lazySearch = value
     }
-  }*/
+  }
 }
 </script>
 
@@ -250,6 +249,7 @@ export default {
     width: 100%;
     overflow: auto;
     max-height: 208px;
+    z-index: 10;
 
     span {
       color: rgba(32, 33, 36, 0.87);

@@ -16,15 +16,16 @@
       </div>
       <div class="selects-wrapper">
         <NpAutocomplete class="select"
+                        v-model="citySearchValue"
                         :items="cityItems"
                         label="Оберіть місто"
-                        @inputHandler="cityInputHandler"
                         @selectHandler="citySelectedHandler"
+                        @clearClick="clearClickHandler"
         />
         <NpAutocomplete class="select"
+                        v-model="warehouseSelectValue"
                         :items="filteredWarehouses"
                         :label="warehouseSelectLabel"
-                        @inputHandler="warehouseInputHandler"
                         @selectHandler="warehouseSelectHandler"
                         :min-length="0"
                         :disabled="!warehouses.length"
@@ -32,7 +33,7 @@
       </div>
     </div>
     <div class="table">
-      <div class="table-head" v-if="!noSearchYet">
+      <div class="table-head" v-if="!noSearchYet && !isMobile">
         <div class="td name">
           Відділення
         </div>
@@ -52,21 +53,39 @@
           <span>До мапи</span>
         </div>
       </div>
-      <div class="table-body">
+      <div class="table-body desktop" v-if="!isMobile">
         <div v-for="warehouse in filteredWarehouses"
              class="table-row">
           <div class="td name">
             {{ warehouse.Description }}
           </div>
-          <div class="td schedule" v-html="calculateSchedule(warehouse)"></div>
-          <div class="td type">
-            {{ calculateType(warehouse) }}
+          <div class="td schedule">
+            <span class="mobile-label">
+              Графік роботи
+            </span>
+            <span v-html="calculateSchedule(warehouse)"></span>
           </div>
-          <div class="td input" v-html="calculateAvailable(warehouse)"></div>
+          <div class="td type">
+            <span class="mobile-label">
+              Тип відділення
+            </span>
+            <span v-html="calculateType(warehouse)"></span>
+          </div>
+          <div class="td input">
+            <span class="mobile-label">
+              Відправлення
+            </span>
+            <span v-html="calculateAvailable(warehouse)"></span>
+          </div>
           <div class="td output">
-            <p class="available active">
-              Доступно
-            </p>
+            <span class="mobile-label">
+              Отримання
+            </span>
+            <span>
+              <p class="available active">
+                Доступно
+              </p>
+            </span>
           </div>
           <div class="td map">
             <a :href="`https://maps.google.com/?q=${warehouse.Latitude},${warehouse.Longitude}`" target="_blank">Показати
@@ -74,43 +93,118 @@
           </div>
         </div>
       </div>
-      <div class="helper-wrapper" v-if="noSearchYet">
-        <div class="info-wrapper">
-          <svg class="arrow" width="35" height="93" viewBox="0 0 35 93" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path
-              d="M33.2199 92.2098C34.0364 92.35 34.8119 91.8018 34.9521 90.9853C35.0923 90.1688 34.5441 89.3933 33.7276 89.2531L33.2199 92.2098ZM15.3443 1.33452C14.9768 0.59209 14.077 0.28817 13.3345 0.655704L1.23583 6.64499C0.493392 7.01252 0.189474 7.91233 0.557006 8.65477C0.924539 9.3972 1.82434 9.70112 2.56678 9.33359L13.3212 4.00978L18.645 14.7642C19.0125 15.5066 19.9123 15.8105 20.6548 15.443C21.3972 15.0755 21.7011 14.1757 21.3336 13.4332L15.3443 1.33452ZM7.63935 66.1891L6.26863 66.7983L7.63935 66.1891ZM33.4737 90.7315C33.7276 89.2531 33.7284 89.2532 33.7291 89.2534C33.7293 89.2534 33.73 89.2535 33.7303 89.2536C33.731 89.2537 33.7314 89.2538 33.7316 89.2538C33.732 89.2539 33.7314 89.2538 33.7299 89.2535C33.7268 89.2529 33.7199 89.2517 33.7093 89.2496C33.6881 89.2456 33.6519 89.2384 33.6015 89.2277C33.5007 89.2063 33.3429 89.1707 33.1337 89.1169C32.7153 89.0094 32.0916 88.8296 31.306 88.5466C29.7346 87.9805 27.5184 87.0025 25.0024 85.3658C19.9829 82.1007 13.7233 76.1848 9.01007 65.5799L6.26863 66.7983C11.2298 77.9611 17.8874 84.3164 23.3665 87.8805C26.0998 89.6585 28.5282 90.7346 30.2892 91.369C31.1698 91.6862 31.8841 91.8933 32.3872 92.0225C32.6388 92.0872 32.8377 92.1324 32.9783 92.1623C33.0486 92.1772 33.1044 92.1883 33.1449 92.196C33.1651 92.1999 33.1815 92.203 33.1941 92.2052C33.2004 92.2064 33.2056 92.2073 33.21 92.2081C33.2121 92.2085 33.214 92.2088 33.2157 92.2091C33.2165 92.2092 33.2176 92.2094 33.218 92.2095C33.219 92.2097 33.2199 92.2098 33.4737 90.7315ZM9.01007 65.5799C6.96822 60.9856 6.27438 54.7897 6.4604 47.9375C6.64559 41.1156 7.69711 33.7933 9.02718 27.0397C10.3561 20.2919 11.9562 14.1461 13.2248 9.68565C13.8589 7.45646 14.4094 5.6507 14.8008 4.40414C14.9965 3.78091 15.1523 3.29761 15.2589 2.97123C15.3121 2.80805 15.3531 2.6841 15.3805 2.60152C15.3943 2.56023 15.4046 2.52928 15.4114 2.50894C15.4148 2.49877 15.4173 2.49124 15.419 2.48641C15.4198 2.484 15.4204 2.48225 15.4207 2.48118C15.4209 2.48064 15.421 2.48035 15.4211 2.48008C15.4211 2.47996 15.4211 2.48 14 2C12.5789 1.52 12.5787 1.52039 12.5786 1.52094C12.5784 1.52135 12.5782 1.52208 12.5779 1.5229C12.5773 1.52454 12.5766 1.52687 12.5756 1.52986C12.5735 1.53585 12.5706 1.54453 12.5668 1.55588C12.5592 1.57856 12.5481 1.61188 12.5336 1.65559C12.5045 1.74298 12.4619 1.87189 12.407 2.04017C12.2971 2.37671 12.1378 2.87083 11.9385 3.50547C11.5401 4.77466 10.9816 6.60656 10.3393 8.86495C9.05521 13.3797 7.43301 19.6089 6.08372 26.46C4.73556 33.3055 3.65288 40.8064 3.4615 47.8561C3.27095 54.8755 3.95818 61.5997 6.26863 66.7983L9.01007 65.5799Z"
-              fill="white"/>
-          </svg>
-          <p class="text">
-            Обери місто та номер відділення/поштомату, щоб побачити актуальний графік роботи
-          </p>
+      <div class="table-body mobile" v-if="isMobile">
+        <div ref="swiper" v-swiper="swiperOption" @slideChange="slideChange">
+          <div class="swiper-wrapper">
+            <div v-for="page in warehousesForMobile" class="swiper-slide">
+              <div v-for="warehouse in page">
+                <div class="td name">
+                  {{ warehouse.Description }}
+                </div>
+                <div class="td schedule">
+            <span class="mobile-label">
+              Графік роботи
+            </span>
+                  <span v-html="calculateSchedule(warehouse)"></span>
+                </div>
+                <div class="td type">
+            <span class="mobile-label">
+              Тип відділення
+            </span>
+                  <span v-html="calculateType(warehouse)"></span>
+                </div>
+                <div class="td input">
+            <span class="mobile-label">
+              Відправлення
+            </span>
+                  <span v-html="calculateAvailable(warehouse)"></span>
+                </div>
+                <div class="td output">
+            <span class="mobile-label">
+              Отримання
+            </span>
+                  <span>
+              <p class="available active">
+                Доступно
+              </p>
+            </span>
+                </div>
+                <div class="td map">
+                  <a :href="`https://maps.google.com/?q=${warehouse.Latitude},${warehouse.Longitude}`" target="_blank">Показати
+                    на мапі</a>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
+        <div v-if="isMobile && !noSearchYet && warehousesForMobile.length > 1" class="mobile-pagination-wrapper">
+          <div class="prev-button" :class="{disabled: this.currentSwiperPage === 1}" @click="prevSlide">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M16.631 5.44724C17.1053 4.98973 17.1043 4.22957 16.6286 3.77339V3.77339C16.1783 3.34153 15.4672 3.34271 15.0184 3.77606L7.24556 11.2802C6.83817 11.6735 6.83834 12.3263 7.24593 12.7194L15.0276 20.2246C15.4763 20.6573 16.187 20.6573 16.6356 20.2246V20.2246C17.1079 19.7691 17.1079 19.0127 16.6356 18.5573L9.83676 12L16.631 5.44724Z"
+                fill="#202124" fill-opacity="0.87"/>
+            </svg>
+          </div>
+          <div class="value-wrapper">
+            <span><b>{{ this.currentSwiperPage }}</b></span> з {{ warehousesForMobile.length }}
+          </div>
+          <div class="next-button" :class="{disabled: this.currentSwiperPage === this.warehousesForMobile.length}" @click="nextSlide">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M7.36436 18.5573C6.89213 19.0127 6.89213 19.7691 7.36436 20.2246C7.81304 20.6573 8.52372 20.6573 8.9724 20.2246L16.7537 12.7198C17.1614 12.3265 17.1614 11.6735 16.7537 11.2802L8.9724 3.77545C8.52372 3.34272 7.81304 3.34272 7.36436 3.77545C6.89213 4.2309 6.89213 4.98729 7.36436 5.44274L14.1632 12L7.36436 18.5573Z"
+                fill="#202124" fill-opacity="0.87"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="helper-wrapper" v-if="noSearchYet">
+      <div class="info-wrapper">
+        <svg class="arrow" width="35" height="93" viewBox="0 0 35 93" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M33.2199 92.2098C34.0364 92.35 34.8119 91.8018 34.9521 90.9853C35.0923 90.1688 34.5441 89.3933 33.7276 89.2531L33.2199 92.2098ZM15.3443 1.33452C14.9768 0.59209 14.077 0.28817 13.3345 0.655704L1.23583 6.64499C0.493392 7.01252 0.189474 7.91233 0.557006 8.65477C0.924539 9.3972 1.82434 9.70112 2.56678 9.33359L13.3212 4.00978L18.645 14.7642C19.0125 15.5066 19.9123 15.8105 20.6548 15.443C21.3972 15.0755 21.7011 14.1757 21.3336 13.4332L15.3443 1.33452ZM7.63935 66.1891L6.26863 66.7983L7.63935 66.1891ZM33.4737 90.7315C33.7276 89.2531 33.7284 89.2532 33.7291 89.2534C33.7293 89.2534 33.73 89.2535 33.7303 89.2536C33.731 89.2537 33.7314 89.2538 33.7316 89.2538C33.732 89.2539 33.7314 89.2538 33.7299 89.2535C33.7268 89.2529 33.7199 89.2517 33.7093 89.2496C33.6881 89.2456 33.6519 89.2384 33.6015 89.2277C33.5007 89.2063 33.3429 89.1707 33.1337 89.1169C32.7153 89.0094 32.0916 88.8296 31.306 88.5466C29.7346 87.9805 27.5184 87.0025 25.0024 85.3658C19.9829 82.1007 13.7233 76.1848 9.01007 65.5799L6.26863 66.7983C11.2298 77.9611 17.8874 84.3164 23.3665 87.8805C26.0998 89.6585 28.5282 90.7346 30.2892 91.369C31.1698 91.6862 31.8841 91.8933 32.3872 92.0225C32.6388 92.0872 32.8377 92.1324 32.9783 92.1623C33.0486 92.1772 33.1044 92.1883 33.1449 92.196C33.1651 92.1999 33.1815 92.203 33.1941 92.2052C33.2004 92.2064 33.2056 92.2073 33.21 92.2081C33.2121 92.2085 33.214 92.2088 33.2157 92.2091C33.2165 92.2092 33.2176 92.2094 33.218 92.2095C33.219 92.2097 33.2199 92.2098 33.4737 90.7315ZM9.01007 65.5799C6.96822 60.9856 6.27438 54.7897 6.4604 47.9375C6.64559 41.1156 7.69711 33.7933 9.02718 27.0397C10.3561 20.2919 11.9562 14.1461 13.2248 9.68565C13.8589 7.45646 14.4094 5.6507 14.8008 4.40414C14.9965 3.78091 15.1523 3.29761 15.2589 2.97123C15.3121 2.80805 15.3531 2.6841 15.3805 2.60152C15.3943 2.56023 15.4046 2.52928 15.4114 2.50894C15.4148 2.49877 15.4173 2.49124 15.419 2.48641C15.4198 2.484 15.4204 2.48225 15.4207 2.48118C15.4209 2.48064 15.421 2.48035 15.4211 2.48008C15.4211 2.47996 15.4211 2.48 14 2C12.5789 1.52 12.5787 1.52039 12.5786 1.52094C12.5784 1.52135 12.5782 1.52208 12.5779 1.5229C12.5773 1.52454 12.5766 1.52687 12.5756 1.52986C12.5735 1.53585 12.5706 1.54453 12.5668 1.55588C12.5592 1.57856 12.5481 1.61188 12.5336 1.65559C12.5045 1.74298 12.4619 1.87189 12.407 2.04017C12.2971 2.37671 12.1378 2.87083 11.9385 3.50547C11.5401 4.77466 10.9816 6.60656 10.3393 8.86495C9.05521 13.3797 7.43301 19.6089 6.08372 26.46C4.73556 33.3055 3.65288 40.8064 3.4615 47.8561C3.27095 54.8755 3.95818 61.5997 6.26863 66.7983L9.01007 65.5799Z"
+            fill="white"/>
+        </svg>
+        <p class="text">
+          Обери місто та номер відділення/поштомату, щоб побачити актуальний графік роботи
+        </p>
       </div>
     </div>
   </div>
 </template>
 <script>
 import NpAutocomplete from "./ui/NpAutocomplete";
+import _ from 'lodash';
 
 const warehousesTypes = {
   warehouse: ['841339c7-591a-42e2-8233-7a0a00f0ed6f', '9a68df70-0267-42a8-bb5c-37f427e36ee4'],
   poshtomat: ['f9316480-5f2d-425d-bc2c-ac7cd29decf0', '95dc212d-479c-4ffb-a8ab-8c1b9073d0bc']
 }
-
 export default {
   name: 'Schedule',
   components: {
     NpAutocomplete
   },
+  props: {
+    isMobile: {
+      required: true,
+      type: Boolean
+    }
+  },
   data() {
     return {
       switcherValue: 'warehouse',
+      citySearchValue: '',
       cityItems: [],
       selectedCity: null,
       warehouses: [],
       warehouseSelectValue: '',
       selectedWarehouse: null,
-      noSearchYet: true
+      noSearchYet: true,
+      swiperOption: {
+        slidesPerView: 1,
+      },
+      currentSwiperPage: 1
     }
   },
   computed: {
@@ -122,9 +216,20 @@ export default {
     },
     warehouseSelectLabel() {
       return this.switcherValue === 'poshtomat' ? 'Оберіть поштомат' : 'Оберіть відділення'
+    },
+    warehousesForMobile() {
+      const res = [];
+      for (let i = 0; i < this.filteredWarehouses.length; i += 3) {
+        const chunk = this.filteredWarehouses.slice(i, i + 3);
+        res.push(chunk);
+      }
+      return res;
     }
   },
   methods: {
+    slideChange() {
+      this.currentSwiperPage = this.$refs['swiper'].swiper.activeIndex + 1
+    },
     async fetchCities(keyword) {
       return await this.$axios.post('', {
         "apiKey": "f0a192955bdefd1dd4c2942624d127b5",
@@ -157,9 +262,6 @@ export default {
     },
     citySelectedHandler(item) {
       this.selectedCity = item;
-    },
-    warehouseInputHandler(value) {
-      this.warehouseSelectValue = value;
     },
     warehouseSelectHandler(value) {
       this.selectedWarehouse = value;
@@ -268,19 +370,34 @@ export default {
       } else {
         return '<p class="available active"> Доступно </p>'
       }
+    },
+    clearClickHandler() {
+      this.warehouseSelectValue = '';
+      this.selectedWarehouse = null;
+      this.cityItems = [];
+      this.warehouses = [];
+    },
+    prevSlide() {
+      this.$refs['swiper'].swiper.slidePrev()
+    },
+    nextSlide() {
+      this.$refs['swiper'].swiper.slideNext()
     }
   },
   watch: {
+    async citySearchValue(value) {
+      if (value.length > 2) {
+        await this.cityInputHandler(value)
+      }
+    },
     async selectedCity(value) {
       if (value) {
-        await this.updateWarehouses()
+        await this.updateWarehouses();
       } else {
-        this.warehouseSelectValue = '';
-        this.selectedWarehouse = null;
-        this.cityItems = [];
+        this.clearClickHandler();
       }
-    }
-  }
+    },
+  },
 }
 </script>
 <style scoped lang="scss">
@@ -386,24 +503,24 @@ export default {
         }
       }
     }
+  }
 
-    .helper-wrapper {
-      background: rgba(187, 188, 188, 0.8);
-      display: flex;
-      justify-content: center;
+  .helper-wrapper {
+    background: rgba(187, 188, 188, 0.8);
+    display: flex;
+    justify-content: center;
 
-      .info-wrapper {
-        text-align: center;
+    .info-wrapper {
+      text-align: center;
 
-        .arrow {
-          animation: arrow-animation .8s ease-out infinite;
-        }
+      .arrow {
+        animation: arrow-animation 1s linear infinite;
+      }
 
-        .text {
-          color: #fff;
-          margin: 0;
-          font-weight: 700;
-        }
+      .text {
+        color: #fff;
+        margin: 0;
+        font-weight: 700;
       }
     }
   }
@@ -447,23 +564,6 @@ export default {
     }
 
     .table {
-      .helper-wrapper {
-        padding: 113px 0 316px;
-
-        .info-wrapper {
-          .arrow {
-            margin-bottom: 24px;
-          }
-
-          .text {
-            font-size: 24px;
-            line-height: 34px;
-            max-width: 621px;
-            margin: 0 auto;
-          }
-        }
-      }
-
       .table-head,
       .table-body .table-row {
         display: flex;
@@ -502,6 +602,10 @@ export default {
         font-size: 13px;
         line-height: 18px;
 
+        .mobile-label {
+          display: none;
+        }
+
         &.name {
           width: 430px;
         }
@@ -523,12 +627,30 @@ export default {
         }
       }
     }
+
+    .helper-wrapper {
+      padding: 113px 0 316px;
+
+      .info-wrapper {
+        .arrow {
+          margin-bottom: 24px;
+        }
+
+        .text {
+          font-size: 24px;
+          line-height: 34px;
+          max-width: 621px;
+          margin: 0 auto;
+        }
+      }
+    }
   }
 }
 
 @media only screen and (max-width: 1024px) {
   .schedule-wrapper {
     padding: 0 24px;
+    margin-bottom: 24px;
   }
 
   .title {
@@ -562,6 +684,85 @@ export default {
   }
 
   .table {
+
+    .table-head {
+      display: none;
+    }
+
+    .table-body {
+      margin: 0 -24px;
+    }
+
+    .td {
+      box-sizing: border-box;
+      color: rgba(51, 51, 47, 1);
+      font-size: 13px;
+      line-height: 18px;
+      padding: 8px 24px;
+      display: flex;
+      justify-content: space-between;
+
+      & > span {
+        width: 50%;
+      }
+
+      &.name {
+        background: #F4F4F4;
+        font-weight: 700;
+      }
+
+      &.schedule {
+
+      }
+
+      &.type {
+
+      }
+
+      &.input, &.output {
+
+      }
+
+      &.map {
+        display: none !important;
+      }
+    }
+
+    .mobile-pagination-wrapper {
+      text-align: center;
+      color: rgba(164, 164, 164, 1);
+      font-size: 12px;
+      line-height: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding-top: 27px;
+
+      .value-wrapper {
+        margin: 0 11px;
+
+        span {
+          color: rgba(32, 33, 36, 0.87);
+        }
+      }
+
+      .prev-button,
+      .next-button {
+        width: 24px;
+        height: 24px;
+      }
+
+      .disabled {
+        svg {
+          path {
+            fill-opacity: 0.38;
+          }
+        }
+      }
+    }
+  }
+
+  .helper-wrapper {
     .info-wrapper {
       padding: 48px 24px 111px;
 
@@ -576,67 +777,9 @@ export default {
         margin: 0 auto;
       }
     }
-
-    .table-head {
-      display: none;
-    }
-
-    .table-head {
-      border-bottom: 1px solid #E5E5E5;
-
-      .td {
-        text-align: center;
-        font-size: 14px;
-        line-height: 19px;
-        padding-top: 16px;
-        padding-bottom: 16px;
-      }
-    }
-
-    .table-body .table-row {
-      border-bottom: 1px solid #E5E5E5;
-    }
-
-    .table-body {
-      max-height: 553px;
-      overflow: auto;
-
-      .row {
-        min-height: 68px;
-      }
-    }
-
-    .td {
-      padding: 16px;
-      box-sizing: border-box;
-      color: rgba(51, 51, 47, 1);
-      font-size: 13px;
-      line-height: 18px;
-
-      &.name {
-        width: 430px;
-      }
-
-      &.schedule {
-        width: 210px;
-      }
-
-      &.type {
-        width: 260px;
-      }
-
-      &.input, &.output {
-        width: 170px;
-      }
-
-      &.map {
-        width: 180px;
-      }
-    }
   }
 }
 </style>
-
 <style lang="scss">
 .schedule-wrapper {
   .schedule-header {

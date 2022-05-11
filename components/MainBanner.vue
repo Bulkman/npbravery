@@ -24,17 +24,17 @@ export default {
     return {
       banners: [
         {
-          image: require('~/assets/images/main-banner/banner-1.png'),
+          image: require('~/assets/images/main-banner/banner-1.jpg'),
           url: 'https://novaposhta.ua/tarify_md?utm_source=site&utm_medium=referral&utm_campaign=npu_website_20220422_20220522_rechi_za_kordon',
           key: 1,
         },
         {
-          image: require('~/assets/images/main-banner/banner-2.png'),
+          image: require('~/assets/images/main-banner/banner-2.jpg'),
           url: 'https://novaposhta.ua/valiza/#rec341828599',
           key: 2,
         },
         {
-          image: require('~/assets/images/main-banner/banner-3.png'),
+          image: require('~/assets/images/main-banner/banner-3.jpg'),
           url: 'https://novaposhta.ua/poshtomat/street/',
           key: 3,
         },

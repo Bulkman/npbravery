@@ -16,12 +16,13 @@
     </button>
     <img class="logo" src="../assets/images/logo.svg" alt="logo"/>
     <nav>
-      <a class="item" href="#">Графік роботи</a>
-      <a class="item" href="#">Міжнародна доставка</a>
-      <a class="item" href="#">Акційні пропозиції</a>
-      <a class="item" href="#">Гуманітарна пошта</a>
-      <a class="item" href="#">Трекінг</a>
-      <a class="item" href="#">FAQ</a>
+      <span v-for="item in nav"
+            :key="item.id"
+            class="item"
+            :class="{active: item.id === activeScrollBlock}"
+            @click="clickHandler(item.id)">
+        {{ item.text }}
+      </span>
     </nav>
   </header>
 </template>
@@ -29,11 +30,48 @@
 <script>
 export default {
   name: 'Header',
+  props: {
+    activeScrollBlock: {
+      default: null
+    }
+  },
   data() {
     return {
-      mobileMenuActive: false
+      mobileMenuActive: false,
+      nav: [
+        {
+          text: 'Графік роботи',
+          id: 'schedule',
+        },
+        {
+          text: 'Міжнародна доставка',
+          id: 'international'
+        },
+        {
+          text: 'Акційні пропозиції',
+          id: 'promo'
+        },
+        {
+          text: 'Гуманітарна пошта',
+          id: 'donat'
+        },
+        {
+          text: 'Трекінг',
+          id: 'tracking'
+        },
+        {
+          text: 'FAQ',
+          id: 'faq'
+        },
+      ]
     }
-  }
+  },
+  methods: {
+    clickHandler(id) {
+      this.$emit('linkClick', id);
+      this.mobileMenuActive = false;
+    }
+  },
 }
 </script>
 
@@ -77,6 +115,8 @@ header {
       display: flex;
 
       .item {
+        cursor: pointer;
+
         &:not(:last-child) {
           margin-right: 20px;
         }
@@ -87,11 +127,17 @@ header {
 
 @media only screen and (max-width: 1024px) {
   header {
-    position: relative;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: #fff;
+    z-index: 10;
     padding: 0 27px;
     display: flex;
     align-items: center;
     height: 79px;
+    box-sizing: border-box;
 
     .hamburger-button {
       position: absolute;
@@ -145,9 +191,22 @@ header {
       transition: all .2s ease-out;
       transform: translateX(100%);
 
-      a {
+      .item {
         display: block;
         padding: 24px;
+        position: relative;
+        &.active {
+          &:before {
+            content: '';
+            position: absolute;
+            width: 5px;
+            height: 100%;
+            left: 0;
+            top: 0;
+            border-radius: 0 3px 3px 0;
+            background: #DA291C;
+          }
+        }
       }
     }
 

@@ -15,7 +15,7 @@
             <p class="text" v-html="banner.text"></p>
           </a>
         </div>
-        <div v-if="banners.length > 3" class="swiper-pagination"></div>
+        <div v-show="isMobile ? banners.length > 1 : banners.length > 3" class="swiper-pagination"></div>
       </div>
     </div>
   </div>
@@ -28,38 +28,38 @@ export default {
   directives: {
     swiper: directive,
   },
+  props: {
+    isMobile: {
+      required: true,
+      type: Boolean
+    }
+  },
   data() {
     return {
       banners: [
         {
-          image: require('~/assets/images/carousel-images/carousel-1.jpg'),
-          text: '<b>Безкоштовна доставка,</b> для всіх замовлень від 500 грн',
-          url: 'https://www.moyo.ua/',
+          image: require('~/assets/images/carousel-images/comfy.png'),
+          text: 'Доставка у Поштомат всього за 1 гривню, для всіх замовлень від 499 грн.',
+          url: 'https://cutt.ly/Comfy_lending_postpmat\n',
           key: 1,
         },
         {
-          image: require('~/assets/images/carousel-images/carousel-2.jpg'),
-          text: '<b>Доставка в поштомат всього 39</b> грн або безкоштовно для замовлень від 599 грн',
-          url: 'https://makeup.com.ua/',
+          image: require('~/assets/images/carousel-images/apteka911.jpeg'),
+          text: 'Замовляй ліки з Аптеки 911, послуги доставки всього 35 гривень',
+          url: 'https://m.apteka911.ua/ua',
           key: 2,
         },
         {
-          image: require('~/assets/images/carousel-images/carousel-3.jpg'),
-          text: 'Безкоштовна доставка у відділення та поштомат <b>до 30.04.22</b>',
-          url: 'https://intertop.ua/deals/6256/?utm_source=novaposhta&utm_medium=referral',
+          image: require('~/assets/images/carousel-images/intertop.png'),
+          text: 'Безкоштовна доставка у відділення та поштомат <b>до 31.05.22</b>',
+          url: 'https://cutt.ly/intertop_lending_postpmat',
           key: 3
         },
         {
-          image: require('~/assets/images/carousel-images/carousel-3.jpg'),
-          text: 'Безкоштовна доставка у відділення та поштомат <b>до 30.04.22</b>',
-          url: 'https://intertop.ua/deals/6256/?utm_source=novaposhta&utm_medium=referral',
+          image: require('~/assets/images/carousel-images/epicenter.jpg'),
+          text: 'Обирай доставку Новою поштою – вигравай один з 20 сертифікатів на 500 грн',
+          url: 'https://epicentrk.ua/ua/actions/pokupayte-lyubye-tovary-na-epicentrk-ua-s-dostavkoy-novoy-pochty.html',
           key: 4
-        },
-        {
-          image: require('~/assets/images/carousel-images/carousel-3.jpg'),
-          text: 'Безкоштовна доставка у відділення та поштомат <b>до 30.04.22</b>',
-          url: 'https://intertop.ua/deals/6256/?utm_source=novaposhta&utm_medium=referral',
-          key: 5
         },
       ],
       swiperOption: {
@@ -91,7 +91,6 @@ export default {
       },
     };
   },
-  computed: {}
 }
 </script>
 <style scoped lang="scss">
