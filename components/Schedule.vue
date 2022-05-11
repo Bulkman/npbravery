@@ -148,8 +148,7 @@
           <div class="value-wrapper">
             <span><b>{{ this.currentSwiperPage }}</b></span> з {{ warehousesForMobile.length }}
           </div>
-          <div class="next-button" :class="{disabled: this.currentSwiperPage === this.warehousesForMobile.length}"
-               @click="nextSlide">
+          <div class="next-button" :class="{disabled: this.currentSwiperPage === this.warehousesForMobile.length}" @click="nextSlide">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path
                 d="M7.36436 18.5573C6.89213 19.0127 6.89213 19.7691 7.36436 20.2246C7.81304 20.6573 8.52372 20.6573 8.9724 20.2246L16.7537 12.7198C17.1614 12.3265 17.1614 11.6735 16.7537 11.2802L8.9724 3.77545C8.52372 3.34272 7.81304 3.34272 7.36436 3.77545C6.89213 4.2309 6.89213 4.98729 7.36436 5.44274L14.1632 12L7.36436 18.5573Z"
