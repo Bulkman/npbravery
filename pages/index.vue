@@ -41,7 +41,7 @@ export default {
       this.isMobile = window.innerWidth < 1025
     },
     linkClickHandler(ref) {
-      const offsetPosition = this.isMobile ? this.$refs[ref].$el.getBoundingClientRect().top - 79 : this.$refs[ref].$el.getBoundingClientRect().top;
+      const offsetPosition = this.isMobile ? this.$refs[ref].$el.getBoundingClientRect().top - 79 : this.$refs[ref].$el.getBoundingClientRect().top - 107;
 
       window.scrollBy({
         top: offsetPosition,
