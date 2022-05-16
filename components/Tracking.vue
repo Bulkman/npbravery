@@ -301,7 +301,7 @@ export default {
           width: 48px;
 
           & > span {
-            .text {
+            span {
               display: none;
             }
 
