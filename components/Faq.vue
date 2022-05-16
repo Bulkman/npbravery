@@ -7,7 +7,7 @@
            class="item"
            :class="{active: item.active}"
       >
-        <h2 class="item-title" @click="item.active = !item.active">
+        <h2 class="item-title" @click="changeActive(item)">
           {{ item.title }}
           <div class="arrow-wrapper">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -170,6 +170,15 @@ export default {
           active: false
         },
       ]
+    }
+  },
+  methods: {
+    changeActive(item) {
+      const itemState = item.active;
+      for (let i = 0; i < this.items.length; i += 1) {
+        this.items[i].active = false;
+      }
+      item.active = !itemState;
     }
   }
 }
