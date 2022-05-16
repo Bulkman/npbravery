@@ -49,9 +49,7 @@
         <div class="td output">
           Отримання
         </div>
-        <div class="td map">
-          <span>До мапи</span>
-        </div>
+        <div class="td map"></div>
       </div>
       <div class="table-body desktop" v-if="!isMobile">
         <div v-for="warehouse in filteredWarehouses"
@@ -574,7 +572,7 @@ export default {
         border-bottom: 1px solid #E5E5E5;
 
         .td {
-          text-align: center;
+          text-align: left;
           font-size: 14px;
           line-height: 19px;
           padding-top: 16px;
