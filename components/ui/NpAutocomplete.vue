@@ -105,7 +105,6 @@ export default {
     },
     focusHandler() {
       this.isFocused = true;
-
     },
     clearSearchValue() {
       this.lazySearch = '';
@@ -114,6 +113,7 @@ export default {
     },
     outsideClickHandler() {
       console.log('test')
+      console.log('test2')
       this.isFocused = false;
       if (!this.selectedItem) {
         this.clearSearchValue();
