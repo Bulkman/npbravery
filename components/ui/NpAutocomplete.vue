@@ -1,5 +1,5 @@
 <template>
-  <div class="autocomplete">
+  <div class="autocomplete" v-click-outside="outsideClickHandler">
     <div class="input-wrapper" :class="{active: !isEmpty || (isFocused && isEmpty), disabled}">
       <label class="label" v-if="label">{{ label }}</label>
       <input class="input"
@@ -7,7 +7,6 @@
              :value="lazySearch"
              @input="inputHandler"
              @focus="focusHandler"
-             @blur="blurHandler"
              :disabled="disabled"
       >
       <div class="arrow-wrapper">
@@ -40,6 +39,7 @@
 </template>
 
 <script>
+import ClickOutside from 'vue-click-outside'
 export default {
   name: 'NpAutocomplete',
   props: {
@@ -70,6 +70,9 @@ export default {
       default: false
     }
   },
+  directives: {
+    ClickOutside
+  },
   data() {
     return {
       lazySearch: this.value,
@@ -98,22 +101,21 @@ export default {
       this.selectedItem = item;
       this.lazySearch = item[this.itemText];
       this.$emit('selectHandler', this.itemValue ? this.selectedItem[this.itemValue] : this.selectedItem);
+      this.isFocused = false;
     },
     focusHandler() {
       this.isFocused = true;
-    },
-    blurHandler() {
-      setTimeout(() => {
-        this.isFocused = false;
-        if (!this.selectedItem) {
-          this.clearSearchValue();
-        }
-      }, 150)
     },
     clearSearchValue() {
       this.lazySearch = '';
       this.$emit('selectHandler', null);
       this.$emit('clearClick')
+    },
+    outsideClickHandler() {
+      this.isFocused = false;
+      if (!this.selectedItem) {
+        this.clearSearchValue();
+      }
     }
   },
   watch: {
