@@ -112,6 +112,7 @@ export default {
       this.$emit('clearClick')
     },
     outsideClickHandler() {
+      console.log('test')
       this.isFocused = false;
       if (!this.selectedItem) {
         this.clearSearchValue();
