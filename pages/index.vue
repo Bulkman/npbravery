@@ -1,8 +1,8 @@
 <template>
   <div class="wrapper">
-<!--    <Header :activeScrollBlock="activeScrollBlock"
+    <Header :activeScrollBlock="activeScrollBlock"
             @linkClick="linkClickHandler"/>
-    <MainBanner/>-->
+    <MainBanner/>
     <Schedule ref="schedule"
               :isMobile="isMobile"/>
     <InternationalDeliveryBanner ref="international"/>
