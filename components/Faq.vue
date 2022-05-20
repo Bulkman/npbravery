@@ -179,6 +179,13 @@ export default {
         this.items[i].active = false;
       }
       item.active = !itemState;
+      if (item.active) {
+        this.$gtm.push({
+          event_category: 'FAQ_click',
+          event_action: item.title,
+          event: 'custom_event'
+        })
+      }
     }
   }
 }

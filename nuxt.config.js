@@ -1,6 +1,7 @@
 export default {
   // Target: https://go.nuxtjs.dev/config-target
-  target: 'static',
+  target: 'server',
+  /*target: 'static',*/
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -25,6 +26,7 @@ export default {
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     { src: '~/plugins/vue-awesome-swiper.js', ssr: false },
+    { src: '~/plugins/gtm'}
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -39,7 +41,19 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
+    '@nuxtjs/gtm',
   ],
+
+  gtm: {
+    id: 'GTM-PV9WN82', // Used as fallback if no runtime config is provided,
+    enabled: true,
+  },
+
+  publicRuntimeConfig: {
+    gtm: {
+      id: process.env.GOOGLE_TAG_MANAGER_ID
+    }
+  },
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
@@ -49,6 +63,7 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
-    publicPath: '/'
+    publicPath: ''
   },
 }
+

@@ -222,6 +222,13 @@ export default {
         res.push(chunk);
       }
       return res;
+    },
+    gtmOptions() {
+      return {
+        switcherValue: this.switcherValue === 'warehouse' ? 'Відділення' : 'Поштомат',
+        selectedCityValue: this.selectedCity && this.selectedCity.Description ? this.selectedCity.Description : null,
+        selectedWarehouseValue: this.warehouseSelectValue || null
+      }
     }
   },
   methods: {
@@ -380,6 +387,14 @@ export default {
     },
     nextSlide() {
       this.$refs['swiper'].swiper.slideNext()
+    },
+    gtm() {
+      this.$gtm.push({
+        event_category: 'search_postal_office',
+        event_action: `${this.gtmOptions.switcherValue} - ${this.gtmOptions.selectedCityValue}`,
+        event_label: this.gtmOptions.selectedWarehouseValue,
+        event: 'custom_event'
+      })
     }
   },
   watch: {
@@ -390,11 +405,22 @@ export default {
     },
     async selectedCity(value) {
       if (value) {
+        this.gtm();
         await this.updateWarehouses();
       } else {
         this.clearClickHandler();
       }
     },
+    warehouseSelectValue(value) {
+      if (value) {
+        this.gtm();
+      }
+    },
+    switcherValue() {
+      if (this.gtmOptions.selectedCityValue) {
+        this.gtm();
+      }
+    }
   },
 }
 </script>

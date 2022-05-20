@@ -65,7 +65,12 @@ export default {
   },
   methods: {
     openTracking() {
-      window.open(`https://novaposhta.ua/ru/tracking/?cargo_number=${this.trackingNumber}`, '_blank').focus();
+      this.$gtm.push({
+        event_category: 'button_click',
+        event_action: 'tracking',
+        event: 'custom_event'
+      })
+      window.open(`https://novaposhta.ua/ru/tracking/?cargo_number=${this.trackingNumber}&utm_source=landing_np&utm_medium=referral&utm_campaign=npbravery`, '_blank').focus();
     }
   }
 }
