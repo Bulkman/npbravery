@@ -105,6 +105,7 @@ export default {
     },
     focusHandler() {
       this.isFocused = true;
+
     },
     clearSearchValue() {
       this.lazySearch = '';
