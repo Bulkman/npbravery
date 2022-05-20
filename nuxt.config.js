@@ -23,6 +23,14 @@ export default {
     '@/assets/css/main.scss'
   ],
 
+  script: [
+    {
+      hid: 'gtm',
+      innerHTML: `window.dataLayer = window.dataLayer || [];`,
+      type: 'text/javascript'
+    }
+  ],
+
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     { src: '~/plugins/vue-awesome-swiper.js', ssr: false },
@@ -46,7 +54,7 @@ export default {
 
   gtm: {
     id: 'GTM-PV9WN82', // Used as fallback if no runtime config is provided,
-    enabled: true,
+    enabled: true
   },
 
   publicRuntimeConfig: {
